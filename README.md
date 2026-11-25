@@ -206,7 +206,6 @@ review UI (rename, retype, reject) and regenerate.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
 Architecture: [docs/architecture.md](docs/architecture.md). Formats:
 [docs/session-format.md](docs/session-format.md), [docs/protocol-model.md](docs/protocol-model.md).
 
