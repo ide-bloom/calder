@@ -1,0 +1,11 @@
+EXPORTS
+    FT_Open
+    FT_OpenEx
+    FT_Close
+    FT_Write
+    FT_Read
+    FT_GetQueueStatus
+    FT_SetBaudRate
+    FT_SetDataCharacteristics
+    FT_SetFlowControl
+    FT_SetTimeouts

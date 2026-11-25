@@ -1,0 +1,94 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build distributions
+    runs-on: windows-latest
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          dotnet-version: "10.0.x"
+      - uses: astral-sh/setup-uv@1db35dd8eee11c5894872e0b383ae6c406cf738d # v10.4.0
+        with:
+          python-version: "3.12"
+      - name: Build native components
+        env:
+          VCPKG_ROOT: ${{ env.VCPKG_INSTALLATION_ROOT }}
+        run: uv run --no-project python scripts/build_native.py
+      - name: Source distribution and pure wheel
+        run: uv build --sdist --wheel --out-dir dist
+      - name: Windows wheel with native binaries
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force src/calder/native | Out-Null
+          Copy-Item out/native/x64/calder_capture64.dll, out/native/x64/calder_launch64.exe, out/native/x86/calder_capture32.dll, out/native/x86/calder_launch32.exe src/calder/native/
+          Copy-Item out/native/x64/calder-uia.* src/calder/native/
+          uv build --wheel --out-dir dist
+      - name: Portable bundle
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}"
+          New-Item -ItemType Directory -Force bundle/calder | Out-Null
+          Copy-Item -Recurse src/calder/native bundle/calder/native
+          Copy-Item dist/*win_amd64.whl, README.md, LICENSE, THIRD_PARTY_NOTICES.md, CHANGELOG.md bundle/calder/
+          Compress-Archive -Path bundle/calder -DestinationPath "dist/calder-$version-windows-portable.zip"
+      - name: SHA256SUMS
+        shell: pwsh
+        run: |
+          Get-ChildItem dist -File | ForEach-Object { "{0}  {1}" -f (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower(), $_.Name } | Set-Content -Encoding ascii dist/SHA256SUMS
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: "dist/*"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dist
+          path: dist
+          if-no-files-found: error
+
+  release:
+    name: GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist
+          path: dist
+      - name: Release notes from CHANGELOG
+        run: python scripts/changelog_section.py "${GITHUB_REF_NAME#v}" > notes.md
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/* --title "Calder $GITHUB_REF_NAME" --notes-file notes.md
+
+  pypi:
+    name: Publish to PyPI
+    needs: build
+    if: vars.PYPI_TRUSTED_PUBLISHING == 'true'
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: dist
+          path: dist
+      - name: Keep only wheels and sdists
+        run: find dist -type f ! -name '*.whl' ! -name '*.tar.gz' -delete
+      - uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3

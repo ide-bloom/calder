@@ -1,0 +1,127 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "calder"
+dynamic = ["version"]
+description = "Watch vendor software talk to a lab instrument, infer the protocol, and generate a tested open driver plus SiLA 2 and MCP servers."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
+requires-python = ">=3.12"
+authors = [{ name = "Calder contributors" }]
+keywords = ["lab-automation", "reverse-engineering", "protocol-inference", "sila2", "mcp", "instrument-driver"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+    "Topic :: System :: Hardware :: Hardware Drivers",
+    "Typing :: Typed",
+]
+dependencies = [
+    "crcmod>=1.7",
+    "fastapi>=0.165.0",
+    "hidapi>=0.15.0",
+    "httpx>=0.28.1",
+    "jinja2>=3.1.6",
+    "mcp>=2.3.0",
+    "numpy>=2.5.5",
+    "pydantic>=2.14.4",
+    "pyserial>=3.5",
+    "pyusb>=1.3.1",
+    "pyvisa>=1.16.2",
+    "rich>=15.0.0",
+    "sila2>=0.14.0",
+    "typer>=0.29.2",
+    "uvicorn>=0.54.0",
+]
+
+[project.optional-dependencies]
+manual = [
+    "pdfplumber>=0.11.11",
+]
+
+[project.scripts]
+calder = "calder.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/ide-bloom/calder"
+Issues = "https://github.com/ide-bloom/calder/issues"
+Changelog = "https://github.com/ide-bloom/calder/blob/main/CHANGELOG.md"
+
+[dependency-groups]
+dev = [
+    "mypy>=2.4.1",
+    "pip-audit>=2.10.1",
+    "pytest>=9.2.0",
+    "pytest-timeout>=2.4.0",
+    "ruff>=0.17.6",
+    "types-pyserial>=3.5.0.20261122",
+]
+
+[tool.hatch.version]
+path = "src/calder/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/calder"]
+
+[tool.hatch.build.targets.wheel.hooks.custom]
+path = "hatch_build.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/calder",
+    "native",
+    "tests",
+    "scripts",
+    "hatch_build.py",
+    "docs",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md",
+]
+exclude = ["**/bin", "**/obj", "**/build", "**/out", "**/vcpkg_installed", "src/calder/native"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "UP", "SIM", "RUF", "N", "S", "BLE", "C4", "PT", "PL", "TRY"]
+ignore = [
+    "PLR0911", "PLR0912", "PLR0913", "PLR0914", "PLR0915", "PLR0917", "PLR1702", "PLR2004", "PLW2901", "PLC0415",
+    "TRY003", "TRY300", "S101", "S603", "S607", "RUF001", "RUF002", "RUF003",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S", "PLR", "N802", "BLE001", "PT018", "PLW1510"]
+"scripts/**" = ["S", "T201"]
+"src/calder/generate/runtime/**" = ["N"]
+
+[tool.mypy]
+strict = true
+python_version = "3.12"
+mypy_path = "src"
+packages = ["calder"]
+plugins = ["pydantic.mypy"]
+warn_unreachable = true
+
+[[tool.mypy.overrides]]
+module = ["hid", "usb", "usb.*", "pdfplumber", "pdfplumber.*", "crcmod", "crcmod.*", "sila2", "sila2.*", "uiautomation"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+    "capture: requires Windows, the built capture DLLs and the WPF test vendor app",
+    "slow: long-running end-to-end tests",
+]

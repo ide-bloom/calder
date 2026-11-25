@@ -1,0 +1,16 @@
+EXPORTS
+    viOpenDefaultRM
+    viOpen
+    viClose
+    viWrite
+    viRead
+    viBufWrite
+    viBufRead
+    viVSPrintf
+    viVPrintf
+    viPrintf
+    viVScanf
+    viScanf
+    viVQueryf
+    viQueryf
+    viSetAttribute

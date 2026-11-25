@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calder review</title>
+<style>/*__CSS__*/</style>
+</head>
+<body>
+<header>
+  <div class="brand"><span class="logo" aria-hidden="true">&#9673;</span> Calder <span class="muted" id="model-name"></span></div>
+  <nav id="tabs" role="tablist">
+    <button role="tab" data-view="timeline" class="active">Timeline</button>
+    <button role="tab" data-view="messages">Messages</button>
+    <button role="tab" data-view="fields">Fields</button>
+    <button role="tab" data-view="framing">Checksum &amp; framing</button>
+    <button role="tab" data-view="statemachine">State machine</button>
+    <button role="tab" data-view="audit">Edits &amp; audit</button>
+  </nav>
+  <button id="theme" title="Toggle dark/light theme" aria-label="Toggle theme">&#9680;</button>
+</header>
+<div id="warnings"></div>
+<main id="view" aria-live="polite"></main>
+<div id="toast" role="status"></div>
+<script>window.CALDER_TOKEN = "__TOKEN__";</script>
+<script>/*__JS__*/</script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+"""Replay simulator: the {{ ctx.title }} as a virtual instrument.
+
+Answers with recorded responses to byte-identical requests and with inferred
+response templates otherwise (echoes and previously set values are reflected).
+
+Run: ``python -m {{ ctx.package }}.simulator --port 5025`` and connect a driver to
+``tcp://127.0.0.1:5025``.
+"""
+
+from __future__ import annotations
+
+import argparse
+import time
+
+from ._runtime.simulator import ReplaySimulator, SimulatorServer
+from .driver import MESSAGE_ORIENTED, SPEC
+
+
+def create() -> ReplaySimulator:
+    return ReplaySimulator(SPEC)
+
+
+def serve(host: str = "127.0.0.1", port: int = 0) -> SimulatorServer:
+    return SimulatorServer(create(), host, port, message_mode=MESSAGE_ORIENTED).start()
+
+
+def main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--host", default="127.0.0.1")
+    parser.add_argument("--port", type=int, default=0)
+    args = parser.parse_args(argv)
+    server = serve(args.host, args.port)
+    print(f"simulating {SPEC.name} on tcp://{server.address}", flush=True)
+    try:
+        while True:
+            time.sleep(1.0)
+    except KeyboardInterrupt:
+        server.stop()
+
+
+if __name__ == "__main__":
+    main()

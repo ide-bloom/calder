@@ -1,0 +1,21 @@
+[
+  {"action": "invoke", "id": "ConnectButton", "delay_ms": 1500},
+  {"action": "set", "id": "SetpointBox", "value": "37.5"},
+  {"action": "set", "id": "RateBox", "value": "2.5"},
+  {"action": "invoke", "id": "ApplyButton", "delay_ms": 1200},
+  {"action": "select", "id": "ModeSelector", "value": "Ramp", "delay_ms": 1200},
+  {"action": "invoke", "id": "StartButton", "delay_ms": 1500},
+  {"action": "set", "id": "SetpointBox", "value": "42.25"},
+  {"action": "set", "id": "RateBox", "value": "1.5"},
+  {"action": "invoke", "id": "ApplyButton", "delay_ms": 1200},
+  {"action": "select", "id": "ModeSelector", "value": "Hold", "delay_ms": 1200},
+  {"action": "invoke", "id": "StopButton", "delay_ms": 1200},
+  {"action": "set", "id": "SetpointBox", "value": "-5"},
+  {"action": "set", "id": "RateBox", "value": "4"},
+  {"action": "invoke", "id": "ApplyButton", "delay_ms": 1200},
+  {"action": "select", "id": "ModeSelector", "value": "Constant", "delay_ms": 1200},
+  {"action": "invoke", "id": "StartButton", "delay_ms": 1200},
+  {"action": "invoke", "id": "StopButton", "delay_ms": 1200},
+  {"action": "invoke", "id": "DisconnectButton", "delay_ms": 800},
+  {"action": "close"}
+]

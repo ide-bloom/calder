@@ -1,0 +1,1632 @@
+{
+  "$defs": {
+    "Alternative": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "score": {
+          "default": 0.0,
+          "title": "Score",
+          "type": "number"
+        },
+        "reason": {
+          "default": "",
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "description"
+      ],
+      "title": "Alternative",
+      "type": "object"
+    },
+    "AuditEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "time": {
+          "format": "date-time",
+          "title": "Time",
+          "type": "string"
+        },
+        "actor": {
+          "default": "user",
+          "title": "Actor",
+          "type": "string"
+        },
+        "action": {
+          "title": "Action",
+          "type": "string"
+        },
+        "target": {
+          "title": "Target",
+          "type": "string"
+        },
+        "before": {
+          "default": null,
+          "title": "Before"
+        },
+        "after": {
+          "default": null,
+          "title": "After"
+        },
+        "note": {
+          "default": "",
+          "title": "Note",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action",
+        "target"
+      ],
+      "title": "AuditEntry",
+      "type": "object"
+    },
+    "ChecksumModel": {
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": {
+          "title": "Algorithm",
+          "type": "string"
+        },
+        "width": {
+          "title": "Width",
+          "type": "integer"
+        },
+        "start": {
+          "title": "Start",
+          "type": "integer"
+        },
+        "end": {
+          "title": "End",
+          "type": "integer"
+        },
+        "position": {
+          "title": "Position",
+          "type": "integer"
+        },
+        "endian": {
+          "default": "be",
+          "enum": [
+            "le",
+            "be"
+          ],
+          "title": "Endian",
+          "type": "string"
+        },
+        "encoding": {
+          "default": "raw",
+          "enum": [
+            "raw",
+            "ascii_hex"
+          ],
+          "title": "Encoding",
+          "type": "string"
+        },
+        "covered": {
+          "default": "raw",
+          "description": "'hex' when coverage is hex text decoded first",
+          "enum": [
+            "raw",
+            "hex"
+          ],
+          "title": "Covered",
+          "type": "string"
+        },
+        "poly": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Poly"
+        },
+        "init": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Init"
+        },
+        "refin": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Refin"
+        },
+        "refout": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Refout"
+        },
+        "xorout": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Xorout"
+        },
+        "evidence": {
+          "$ref": "#/$defs/Evidence"
+        }
+      },
+      "required": [
+        "algorithm",
+        "width",
+        "start",
+        "end",
+        "position",
+        "evidence"
+      ],
+      "title": "ChecksumModel",
+      "type": "object"
+    },
+    "Classification": {
+      "enum": [
+        "read_only",
+        "configuring",
+        "actuating"
+      ],
+      "title": "Classification",
+      "type": "string"
+    },
+    "Direction": {
+      "description": "Direction relative to the host: TX is host to instrument, RX is instrument to host.",
+      "enum": [
+        "tx",
+        "rx",
+        "none"
+      ],
+      "title": "Direction",
+      "type": "string"
+    },
+    "EncodingKind": {
+      "enum": [
+        "uint",
+        "int",
+        "float",
+        "bcd",
+        "bits",
+        "bytes",
+        "ascii_int",
+        "ascii_float",
+        "ascii_hex",
+        "ascii_enum",
+        "ascii_string"
+      ],
+      "title": "EncodingKind",
+      "type": "string"
+    },
+    "EncodingModel": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "$ref": "#/$defs/EncodingKind"
+        },
+        "width": {
+          "default": 0,
+          "title": "Width",
+          "type": "integer"
+        },
+        "endian": {
+          "default": "le",
+          "enum": [
+            "le",
+            "be"
+          ],
+          "title": "Endian",
+          "type": "string"
+        },
+        "scale_exp": {
+          "default": 0,
+          "title": "Scale Exp",
+          "type": "integer"
+        },
+        "decimals": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Decimals"
+        },
+        "min_decimals": {
+          "default": 0,
+          "title": "Min Decimals",
+          "type": "integer"
+        },
+        "plus_sign": {
+          "default": false,
+          "title": "Plus Sign",
+          "type": "boolean"
+        },
+        "zero_pad": {
+          "default": false,
+          "title": "Zero Pad",
+          "type": "boolean"
+        },
+        "exponent": {
+          "default": false,
+          "title": "Exponent",
+          "type": "boolean"
+        },
+        "upper": {
+          "default": true,
+          "title": "Upper",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "EncodingModel",
+      "type": "object"
+    },
+    "EnumValue": {
+      "additionalProperties": false,
+      "properties": {
+        "wire": {
+          "title": "Wire",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "ui_value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ui Value"
+        },
+        "count": {
+          "default": 0,
+          "title": "Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "wire",
+        "label"
+      ],
+      "title": "EnumValue",
+      "type": "object"
+    },
+    "EventRef": {
+      "additionalProperties": false,
+      "properties": {
+        "session": {
+          "title": "Session",
+          "type": "string"
+        },
+        "index": {
+          "title": "Index",
+          "type": "integer"
+        },
+        "ui": {
+          "default": false,
+          "title": "Ui",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "session",
+        "index"
+      ],
+      "title": "EventRef",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "method": {
+          "title": "Method",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "support": {
+          "default": 0,
+          "title": "Support",
+          "type": "integer"
+        },
+        "contradictions": {
+          "default": 0,
+          "title": "Contradictions",
+          "type": "integer"
+        },
+        "events": {
+          "items": {
+            "$ref": "#/$defs/EventRef"
+          },
+          "title": "Events",
+          "type": "array"
+        },
+        "alternatives": {
+          "items": {
+            "$ref": "#/$defs/Alternative"
+          },
+          "title": "Alternatives",
+          "type": "array"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        }
+      },
+      "required": [
+        "method",
+        "confidence"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "Example": {
+      "additionalProperties": false,
+      "properties": {
+        "session": {
+          "title": "Session",
+          "type": "string"
+        },
+        "index": {
+          "title": "Index",
+          "type": "integer"
+        },
+        "raw": {
+          "description": "Hex of the full frame",
+          "title": "Raw",
+          "type": "string"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        },
+        "values": {
+          "additionalProperties": true,
+          "title": "Values",
+          "type": "object"
+        }
+      },
+      "required": [
+        "session",
+        "index",
+        "raw"
+      ],
+      "title": "Example",
+      "type": "object"
+    },
+    "Exchange": {
+      "additionalProperties": false,
+      "properties": {
+        "session": {
+          "title": "Session",
+          "type": "string"
+        },
+        "index": {
+          "title": "Index",
+          "type": "integer"
+        },
+        "request": {
+          "title": "Request",
+          "type": "string"
+        },
+        "responses": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Responses",
+          "type": "array"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "response_message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Response Message"
+        },
+        "latency_ms": {
+          "default": 0.0,
+          "title": "Latency Ms",
+          "type": "number"
+        }
+      },
+      "required": [
+        "session",
+        "index",
+        "request",
+        "message"
+      ],
+      "title": "Exchange",
+      "type": "object"
+    },
+    "FieldModel": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "role": {
+          "$ref": "#/$defs/FieldRole"
+        },
+        "offset": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Offset"
+        },
+        "length": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Length"
+        },
+        "token": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Token"
+        },
+        "encoding": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EncodingModel"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "constant": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Hex for binary layouts, text for ASCII",
+          "title": "Constant"
+        },
+        "enum": {
+          "items": {
+            "$ref": "#/$defs/EnumValue"
+          },
+          "title": "Enum",
+          "type": "array"
+        },
+        "units": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Units"
+        },
+        "label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Label"
+        },
+        "ui_element": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ui Element"
+        },
+        "range": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ValueRange"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "echo_of": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Echo Of"
+        },
+        "reflects": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "(message id, field id)",
+          "title": "Reflects"
+        },
+        "status_ok": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Status Ok",
+          "type": "array"
+        },
+        "status": {
+          "$ref": "#/$defs/Status",
+          "default": "inferred"
+        },
+        "suggested_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Suggested Name"
+        },
+        "suggested_doc": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Suggested Doc"
+        },
+        "doc": {
+          "default": "",
+          "title": "Doc",
+          "type": "string"
+        },
+        "evidence": {
+          "$ref": "#/$defs/Evidence"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "role",
+        "evidence"
+      ],
+      "title": "FieldModel",
+      "type": "object"
+    },
+    "FieldRole": {
+      "enum": [
+        "value",
+        "enum",
+        "counter",
+        "constant",
+        "address",
+        "status",
+        "echo",
+        "opcode",
+        "length",
+        "checksum",
+        "start"
+      ],
+      "title": "FieldRole",
+      "type": "string"
+    },
+    "FramingKind": {
+      "enum": [
+        "delimited",
+        "length_prefixed",
+        "fixed_length",
+        "message",
+        "modbus_rtu"
+      ],
+      "title": "FramingKind",
+      "type": "string"
+    },
+    "FramingModel": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "$ref": "#/$defs/FramingKind"
+        },
+        "encoding": {
+          "enum": [
+            "ascii",
+            "binary"
+          ],
+          "title": "Encoding",
+          "type": "string"
+        },
+        "terminator_tx": {
+          "default": "",
+          "description": "Hex",
+          "title": "Terminator Tx",
+          "type": "string"
+        },
+        "terminator_rx": {
+          "default": "",
+          "description": "Hex",
+          "title": "Terminator Rx",
+          "type": "string"
+        },
+        "start": {
+          "default": "",
+          "description": "Hex",
+          "title": "Start",
+          "type": "string"
+        },
+        "length_field": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/LengthFieldModel"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "frame_length": {
+          "default": 0,
+          "title": "Frame Length",
+          "type": "integer"
+        },
+        "fixed_width_rx": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fixed Width Rx"
+        },
+        "fixed_width_tx": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fixed Width Tx"
+        },
+        "gap_ms": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gap Ms"
+        },
+        "evidence": {
+          "$ref": "#/$defs/Evidence"
+        }
+      },
+      "required": [
+        "kind",
+        "encoding",
+        "evidence"
+      ],
+      "title": "FramingModel",
+      "type": "object"
+    },
+    "LengthFieldModel": {
+      "additionalProperties": false,
+      "properties": {
+        "offset": {
+          "title": "Offset",
+          "type": "integer"
+        },
+        "width": {
+          "title": "Width",
+          "type": "integer"
+        },
+        "endian": {
+          "default": "le",
+          "enum": [
+            "le",
+            "be"
+          ],
+          "title": "Endian",
+          "type": "string"
+        },
+        "adjust": {
+          "default": 0,
+          "title": "Adjust",
+          "type": "integer"
+        },
+        "includes_header": {
+          "default": false,
+          "title": "Includes Header",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "offset",
+        "width"
+      ],
+      "title": "LengthFieldModel",
+      "type": "object"
+    },
+    "ManualInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "default": "",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "pages": {
+          "default": 0,
+          "title": "Pages",
+          "type": "integer"
+        },
+        "commands_found": {
+          "default": 0,
+          "title": "Commands Found",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "title": "ManualInfo",
+      "type": "object"
+    },
+    "ManualRef": {
+      "additionalProperties": false,
+      "properties": {
+        "mnemonic": {
+          "title": "Mnemonic",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "page": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Page"
+        },
+        "score": {
+          "default": 0.0,
+          "title": "Score",
+          "type": "number"
+        }
+      },
+      "required": [
+        "mnemonic",
+        "description"
+      ],
+      "title": "ManualRef",
+      "type": "object"
+    },
+    "MessageKind": {
+      "enum": [
+        "command",
+        "query",
+        "response",
+        "unsolicited"
+      ],
+      "title": "MessageKind",
+      "type": "string"
+    },
+    "MessageType": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "direction": {
+          "$ref": "#/$defs/Direction"
+        },
+        "kind": {
+          "$ref": "#/$defs/MessageKind"
+        },
+        "key": {
+          "title": "Key",
+          "type": "string"
+        },
+        "layout": {
+          "enum": [
+            "tokens",
+            "columns",
+            "binary"
+          ],
+          "title": "Layout",
+          "type": "string"
+        },
+        "header": {
+          "default": "",
+          "title": "Header",
+          "type": "string"
+        },
+        "header_sep": {
+          "default": " ",
+          "title": "Header Sep",
+          "type": "string"
+        },
+        "arg_sep": {
+          "default": ",",
+          "title": "Arg Sep",
+          "type": "string"
+        },
+        "length": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Length"
+        },
+        "fields": {
+          "items": {
+            "$ref": "#/$defs/FieldModel"
+          },
+          "title": "Fields",
+          "type": "array"
+        },
+        "response": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Response"
+        },
+        "response_timeout_ms": {
+          "default": 1000,
+          "title": "Response Timeout Ms",
+          "type": "integer"
+        },
+        "classification": {
+          "$ref": "#/$defs/Classification",
+          "default": "read_only"
+        },
+        "classification_reason": {
+          "default": "",
+          "title": "Classification Reason",
+          "type": "string"
+        },
+        "classification_confirmed": {
+          "default": false,
+          "title": "Classification Confirmed",
+          "type": "boolean"
+        },
+        "ui_bindings": {
+          "items": {
+            "$ref": "#/$defs/UiBinding"
+          },
+          "title": "Ui Bindings",
+          "type": "array"
+        },
+        "preconditions": {
+          "items": {
+            "$ref": "#/$defs/Precondition"
+          },
+          "title": "Preconditions",
+          "type": "array"
+        },
+        "examples": {
+          "items": {
+            "$ref": "#/$defs/Example"
+          },
+          "title": "Examples",
+          "type": "array"
+        },
+        "count": {
+          "default": 0,
+          "title": "Count",
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/$defs/Status",
+          "default": "inferred"
+        },
+        "suggested_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Suggested Name"
+        },
+        "suggested_doc": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Suggested Doc"
+        },
+        "doc": {
+          "default": "",
+          "title": "Doc",
+          "type": "string"
+        },
+        "manual": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ManualRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "evidence": {
+          "$ref": "#/$defs/Evidence"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "direction",
+        "kind",
+        "key",
+        "layout",
+        "evidence"
+      ],
+      "title": "MessageType",
+      "type": "object"
+    },
+    "Precondition": {
+      "additionalProperties": false,
+      "properties": {
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "disabled_by": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Disabled By",
+          "type": "array"
+        },
+        "status": {
+          "$ref": "#/$defs/Status",
+          "default": "inferred"
+        },
+        "evidence": {
+          "$ref": "#/$defs/Evidence"
+        }
+      },
+      "required": [
+        "message",
+        "evidence"
+      ],
+      "title": "Precondition",
+      "type": "object"
+    },
+    "ProtocolFamily": {
+      "enum": [
+        "generic",
+        "scpi",
+        "modbus_rtu",
+        "modbus_ascii",
+        "modbus_tcp"
+      ],
+      "title": "ProtocolFamily",
+      "type": "string"
+    },
+    "SerialSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "baudrate": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Baudrate"
+        },
+        "bytesize": {
+          "default": 8,
+          "title": "Bytesize",
+          "type": "integer"
+        },
+        "parity": {
+          "default": "N",
+          "enum": [
+            "N",
+            "E",
+            "O",
+            "M",
+            "S"
+          ],
+          "title": "Parity",
+          "type": "string"
+        },
+        "stopbits": {
+          "default": 1.0,
+          "title": "Stopbits",
+          "type": "number"
+        },
+        "xonxoff": {
+          "default": false,
+          "title": "Xonxoff",
+          "type": "boolean"
+        },
+        "rtscts": {
+          "default": false,
+          "title": "Rtscts",
+          "type": "boolean"
+        },
+        "dsrdtr": {
+          "default": false,
+          "title": "Dsrdtr",
+          "type": "boolean"
+        },
+        "read_timeout_ms": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Read Timeout Ms"
+        },
+        "write_timeout_ms": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Write Timeout Ms"
+        }
+      },
+      "title": "SerialSettings",
+      "type": "object"
+    },
+    "SessionRef": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "path": {
+          "default": "",
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "default": "",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "events": {
+          "default": 0,
+          "title": "Events",
+          "type": "integer"
+        },
+        "ui_events": {
+          "default": 0,
+          "title": "Ui Events",
+          "type": "integer"
+        },
+        "source": {
+          "default": "",
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "SessionRef",
+      "type": "object"
+    },
+    "StateMachineModel": {
+      "additionalProperties": false,
+      "properties": {
+        "k": {
+          "title": "K",
+          "type": "integer"
+        },
+        "initial": {
+          "default": 0,
+          "title": "Initial",
+          "type": "integer"
+        },
+        "states": {
+          "items": {
+            "$ref": "#/$defs/StateModel"
+          },
+          "title": "States",
+          "type": "array"
+        },
+        "transitions": {
+          "items": {
+            "$ref": "#/$defs/TransitionModel"
+          },
+          "title": "Transitions",
+          "type": "array"
+        },
+        "evidence": {
+          "$ref": "#/$defs/Evidence"
+        }
+      },
+      "required": [
+        "k",
+        "evidence"
+      ],
+      "title": "StateMachineModel",
+      "type": "object"
+    },
+    "StateModel": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "integer"
+        },
+        "label": {
+          "default": "",
+          "title": "Label",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "StateModel",
+      "type": "object"
+    },
+    "Status": {
+      "enum": [
+        "inferred",
+        "accepted",
+        "rejected",
+        "edited"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "TransitionModel": {
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "title": "Source",
+          "type": "integer"
+        },
+        "target": {
+          "title": "Target",
+          "type": "integer"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "count": {
+          "default": 0,
+          "title": "Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "source",
+        "target",
+        "message"
+      ],
+      "title": "TransitionModel",
+      "type": "object"
+    },
+    "Transport": {
+      "enum": [
+        "serial",
+        "visa",
+        "ftdi",
+        "winusb",
+        "hid",
+        "tcp"
+      ],
+      "title": "Transport",
+      "type": "string"
+    },
+    "TransportSpec": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "$ref": "#/$defs/Transport"
+        },
+        "resource": {
+          "default": "",
+          "title": "Resource",
+          "type": "string"
+        },
+        "serial": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SerialSettings"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "settings": {
+          "additionalProperties": true,
+          "title": "Settings",
+          "type": "object"
+        },
+        "evidence": {
+          "$ref": "#/$defs/Evidence"
+        }
+      },
+      "required": [
+        "kind",
+        "evidence"
+      ],
+      "title": "TransportSpec",
+      "type": "object"
+    },
+    "UiBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "element": {
+          "title": "Element",
+          "type": "string"
+        },
+        "element_name": {
+          "default": "",
+          "title": "Element Name",
+          "type": "string"
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "constants": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "field id -> wire value",
+          "title": "Constants",
+          "type": "object"
+        },
+        "support": {
+          "default": 0,
+          "title": "Support",
+          "type": "integer"
+        },
+        "confidence": {
+          "default": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "element",
+        "kind"
+      ],
+      "title": "UiBinding",
+      "type": "object"
+    },
+    "ValueRange": {
+      "additionalProperties": false,
+      "properties": {
+        "minimum": {
+          "title": "Minimum",
+          "type": "number"
+        },
+        "maximum": {
+          "title": "Maximum",
+          "type": "number"
+        }
+      },
+      "required": [
+        "minimum",
+        "maximum"
+      ],
+      "title": "ValueRange",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "const": "calder.protocol",
+      "default": "calder.protocol",
+      "title": "Kind",
+      "type": "string"
+    },
+    "schema_version": {
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "created": {
+      "format": "date-time",
+      "title": "Created",
+      "type": "string"
+    },
+    "calder_version": {
+      "default": "",
+      "title": "Calder Version",
+      "type": "string"
+    },
+    "family": {
+      "$ref": "#/$defs/ProtocolFamily",
+      "default": "generic"
+    },
+    "stream": {
+      "default": "",
+      "title": "Stream",
+      "type": "string"
+    },
+    "sessions": {
+      "items": {
+        "$ref": "#/$defs/SessionRef"
+      },
+      "title": "Sessions",
+      "type": "array"
+    },
+    "transport": {
+      "$ref": "#/$defs/TransportSpec"
+    },
+    "framing": {
+      "$ref": "#/$defs/FramingModel"
+    },
+    "checksum": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ChecksumModel"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "messages": {
+      "items": {
+        "$ref": "#/$defs/MessageType"
+      },
+      "title": "Messages",
+      "type": "array"
+    },
+    "state_machine": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/StateMachineModel"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "exchanges": {
+      "items": {
+        "$ref": "#/$defs/Exchange"
+      },
+      "title": "Exchanges",
+      "type": "array"
+    },
+    "unsolicited": {
+      "description": "Hex frames streamed by the instrument",
+      "items": {
+        "type": "string"
+      },
+      "title": "Unsolicited",
+      "type": "array"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    },
+    "manual": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ManualInfo"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "audit": {
+      "items": {
+        "$ref": "#/$defs/AuditEntry"
+      },
+      "title": "Audit",
+      "type": "array"
+    }
+  },
+  "required": [
+    "name",
+    "transport",
+    "framing"
+  ],
+  "title": "Calder protocol model",
+  "type": "object",
+  "$id": "https://github.com/ide-bloom/calder/schema/protocol-1.0.json"
+}
